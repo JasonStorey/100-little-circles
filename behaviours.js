@@ -1,6 +1,35 @@
 var NUMBER_OF_MOVERS = 100;
 var movers = [];
 
+var BEHAVIOURS = {
+    reset: function() {
+        this.radius = 1;
+        this.theta = random(TWO_PI);
+        this.drag = 0.2;
+        this.vx = 0;
+        this.vy = 0;
+    },
+    weave: function() {
+        this.theta += random(-0.5, 0.5);
+        this.vx += sin(this.theta);
+        this.vy += cos(this.theta);
+        this.vx *= 1 - this.drag;
+        this.vy *= 1 - this.drag;
+    },
+    grow: function() {
+        this.radius *= 1.01;
+    },
+    flutter: function() {
+        this.drag = 0.1;
+        this.radius = random(10);
+        this.theta += random(0.15);
+        this.vx += sin(this.theta);
+        this.vy += (cos(this.theta) / 2) - random(0.3);
+        this.vx *= 1 - this.drag;
+        this.vy *= 1 - this.drag;
+    }
+};
+
 function Mover(x, y) {
     this.x = x;
     this.y = y;
@@ -24,8 +53,7 @@ Mover.prototype = {
             this.y = ctx.height + this.radius;
         }
 
-        BEHAVIOURS.weave.call(this);
-        BEHAVIOURS.grow.call(this);
+        BEHAVIOURS.flutter.call(this);
     },
     draw: function(ctx) {
         ctx.beginPath();
@@ -52,24 +80,3 @@ Sketch.create({
         }.bind(this));
     }
 });
-
-
-var BEHAVIOURS = {
-    reset: function() {
-        this.radius = 1;
-        this.theta = random(TWO_PI);
-        this.drag = 0.2;
-        this.vx = 0;
-        this.vy = 0;
-    },
-    weave: function() {
-        this.theta += random(-0.5, 0.5);
-        this.vx += sin(this.theta);
-        this.vy += cos(this.theta);
-        this.vx *= 1 - this.drag;
-        this.vy *= 1 - this.drag;
-    },
-    grow: function() {
-        this.radius *= 1.01;
-    }
-};
