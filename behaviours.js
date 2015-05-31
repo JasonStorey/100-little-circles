@@ -2,15 +2,9 @@ var NUMBER_OF_MOVERS = 100;
 var movers = [];
 
 function Mover(x, y) {
-    this.radius = 5;
-    this.theta = random(TWO_PI);
-    this.drag = 0.2;
-
     this.x = x;
     this.y = y;
-
-    this.vx = 0;
-    this.vy = 0;
+    BEHAVIOURS.reset.call(this);
 }
 
 Mover.prototype = {
@@ -30,13 +24,8 @@ Mover.prototype = {
             this.y = ctx.height + this.radius;
         }
 
-        this.theta += random(-0.5, 0.5);
-
-        this.vx += sin(this.theta);
-        this.vy += cos(this.theta);
-
-        this.vx *= 1 - this.drag;
-        this.vy *= 1 - this.drag;
+        BEHAVIOURS.weave.call(this);
+        BEHAVIOURS.grow.call(this);
     },
     draw: function(ctx) {
         ctx.beginPath();
@@ -63,3 +52,24 @@ Sketch.create({
         }.bind(this));
     }
 });
+
+
+var BEHAVIOURS = {
+    reset: function() {
+        this.radius = 1;
+        this.theta = random(TWO_PI);
+        this.drag = 0.2;
+        this.vx = 0;
+        this.vy = 0;
+    },
+    weave: function() {
+        this.theta += random(-0.5, 0.5);
+        this.vx += sin(this.theta);
+        this.vy += cos(this.theta);
+        this.vx *= 1 - this.drag;
+        this.vy *= 1 - this.drag;
+    },
+    grow: function() {
+        this.radius *= 1.01;
+    }
+};
