@@ -77,7 +77,7 @@ var MOVEMENTS = {
             mover.vy *= 1 - mover.drag;
         }
     },
-    wave: {
+    waves: {
         setup: function(mover) {
             mover.theta = random(TWO_PI);
             mover.radius = 1 + (mover.theta * 2);
@@ -85,7 +85,7 @@ var MOVEMENTS = {
         },
         update: function(mover) {
             mover.theta += 0.05;
-            mover.vy = cos(mover.theta) * (mover.radius / 5);
+            mover.vy = cos(mover.theta) * (mover.radius / 5) + 0.4;
         }
     },
     fizz: {
@@ -171,7 +171,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow', 'wave', 'fizz']);
+    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow', 'waves', 'fizz']);
 
     movementController.onChange(function (value) {
         oneHundredLittleCircles.movement = MOVEMENTS[value];
