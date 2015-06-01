@@ -94,11 +94,11 @@ var MOVEMENTS = {
             mover.radius = random(1, 70);
         },
         update: function(mover) {
-            mover.radius *= 1.0005;
-
             if(mover.radius > 70) {
                 mover.radius *= 1.02;
                 mover.vy += -5;
+            } else {
+                mover.radius *= 1.0005;
             }
 
             mover.theta += random(-0.3, 0.3);
