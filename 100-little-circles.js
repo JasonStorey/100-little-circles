@@ -2,7 +2,7 @@ function OneHundredLittleCircles() {
     this.movement = 'weave';
     this._movement = MOVEMENTS[this.movement];
     this.movers = [];
-    this.fillStyle = '#000';
+    this.fill = '#000';
     this.background = '#fff';
     this.velocity = 1;
 }
@@ -21,7 +21,7 @@ OneHundredLittleCircles.prototype = {
             update: function () {
                 self._movement = MOVEMENTS[self.movement];
                 self.movers.forEach(function (mover) {
-                    mover.update(self._movement, self.fillStyle, self.velocity);
+                    mover.update(self._movement, self.fill, self.velocity);
                 });
             },
             draw: function () {
@@ -173,7 +173,7 @@ Mover.prototype = {
     var gui = new dat.GUI();
     gui.add(oneHundredLittleCircles, 'movement', ['weave', 'flutter', 'grow', 'waves', 'fizz']);
     gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
-    gui.addColor(oneHundredLittleCircles, 'fillStyle');
+    gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
 
 }(OneHundredLittleCircles, dat));
