@@ -107,17 +107,19 @@ Mover.prototype = {
     }
 };
 
-var behaviourConfig = {
-    movement: 'weave'
-};
+(function init(Behaviours, dat) {
+    var behaviourConfig = {
+        movement: 'weave'
+    };
 
-var behaviours = new Behaviours();
-behaviours.init();
+    var behaviours = new Behaviours();
+    behaviours.init();
 
-var gui = new dat.GUI();
-var movementController = gui.add(behaviourConfig, 'movement', ['weave', 'flutter', 'grow']);
+    var gui = new dat.GUI();
+    var movementController = gui.add(behaviourConfig, 'movement', ['weave', 'flutter', 'grow']);
 
-movementController.onChange(function(value) {
-    behaviours.movement = MOVEMENTS[value];
-    behaviours.update();
-});
+    movementController.onChange(function (value) {
+        behaviours.movement = MOVEMENTS[value];
+        behaviours.update();
+    });
+}(Behaviours, dat));
