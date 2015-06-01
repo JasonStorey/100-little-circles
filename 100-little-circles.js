@@ -1,22 +1,25 @@
 function OneHundredLittleCircles() {
-    this.movement = MOVEMENTS.weave;
+    this.movement = 'weave';
+    this._movement = MOVEMENTS[this.movement];
     this.movers = [];
+    this.fillStyle = '#000';
 }
 
 OneHundredLittleCircles.prototype = {
     init: function() {
-        var self = this;
         var NUMBER_OF_MOVERS = 100;
+        var self = this;
 
         Sketch.create({
             setup: function () {
                 for (var j = 0; j < NUMBER_OF_MOVERS; j++) {
-                    self.movers.push(new Mover(random(this.width), random(this.height), this, self.movement));
+                    self.movers.push(new Mover(random(this.width), random(this.height), this));
                 }
             },
             update: function () {
+                self._movement = MOVEMENTS[self.movement];
                 self.movers.forEach(function (mover) {
-                    mover.update();
+                    mover.update(self._movement, self.fillStyle);
                 });
             },
             draw: function () {
@@ -30,12 +33,6 @@ OneHundredLittleCircles.prototype = {
         this.movers.forEach(function (mover) {
             mover.reset();
         });
-    },
-    update: function() {
-        this.movers.forEach(function (mover) {
-            mover.reset();
-            mover.setMovement(this.movement)
-        }.bind(this));
     }
 };
 
@@ -116,11 +113,12 @@ var MOVEMENTS = {
     }
 };
 
-function Mover(x, y, ctx, movement) {
+function Mover(x, y, ctx) {
     this.x = x;
     this.y = y;
     this.ctx = ctx;
-    this.setMovement(movement);
+    this.fillStyle = '#000';
+    this.reset();
 }
 
 Mover.prototype = {
@@ -131,12 +129,15 @@ Mover.prototype = {
         this.vx = 0;
         this.vy = 0;
     },
-    setMovement: function(movement) {
-        this.reset();
-        this.movement = movement;
-        this.movement.setup(this);
-    },
-    update: function() {
+    update: function(movement, fillstyle) {
+        this.fillStyle = fillstyle;
+
+        if(this.movement !== movement) {
+            this.reset();
+            this.movement = movement;
+            this.movement.setup(this);
+        }
+
         this.movement.update(this);
 
         this.x += this.vx;
@@ -157,24 +158,17 @@ Mover.prototype = {
     draw: function() {
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.radius, 0, TWO_PI);
-        this.ctx.fillStyle = '#000';
+        this.ctx.fillStyle = this.fillStyle;
         this.ctx.fill();
     }
 };
 
 (function init(OneHundredLittleCircles, dat) {
-    var config = {
-        movement: 'weave'
-    };
-
     var oneHundredLittleCircles = new OneHundredLittleCircles();
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow', 'waves', 'fizz']);
+    gui.add(oneHundredLittleCircles, 'movement', ['weave', 'flutter', 'grow', 'waves', 'fizz']);
+    gui.addColor(oneHundredLittleCircles, 'fillStyle');
 
-    movementController.onChange(function (value) {
-        oneHundredLittleCircles.movement = MOVEMENTS[value];
-        oneHundredLittleCircles.update();
-    });
 }(OneHundredLittleCircles, dat));
