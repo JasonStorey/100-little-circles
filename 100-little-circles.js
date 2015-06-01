@@ -87,6 +87,32 @@ var MOVEMENTS = {
             mover.theta += 0.05;
             mover.vy = cos(mover.theta) * (mover.radius / 5);
         }
+    },
+    fizz: {
+        setup: function(mover) {
+            mover.theta = random(TWO_PI);
+            mover.radius = random(1, 70);
+        },
+        update: function(mover) {
+            mover.radius *= 1.0005;
+
+            if(mover.radius > 70) {
+                mover.radius *= 1.02;
+                mover.vy += -5;
+            }
+
+            mover.theta += random(-0.3, 0.3);
+            mover.vx += sin(mover.theta);
+            mover.vy += cos(mover.theta) - 2;
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+
+            if(mover.y + mover.vy - mover.radius < 0 - (mover.radius * 2)) {
+                mover.radius = random(1, 70);
+                mover.vy = -1;
+                mover.y = mover.ctx.height + mover.radius;
+            }
+        }
     }
 };
 
@@ -111,6 +137,8 @@ Mover.prototype = {
         this.movement.setup(this);
     },
     update: function() {
+        this.movement.update(this);
+
         this.x += this.vx;
         this.y += this.vy;
 
@@ -125,8 +153,6 @@ Mover.prototype = {
         } else if(this.y - this.radius < 0 - (this.radius * 2)) {
             this.y = this.ctx.height + this.radius;
         }
-
-        this.movement.update(this);
     },
     draw: function() {
         this.ctx.beginPath();
@@ -145,7 +171,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow', 'wave']);
+    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow', 'wave', 'fizz']);
 
     movementController.onChange(function (value) {
         oneHundredLittleCircles.movement = MOVEMENTS[value];
