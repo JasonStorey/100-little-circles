@@ -1,9 +1,9 @@
-function Behaviours() {
+function OneHundredLittleCircles() {
     this.movement = MOVEMENTS.weave;
     this.movers = [];
 }
 
-Behaviours.prototype = {
+OneHundredLittleCircles.prototype = {
     init: function() {
         var self = this;
         var NUMBER_OF_MOVERS = 100;
@@ -107,19 +107,19 @@ Mover.prototype = {
     }
 };
 
-(function init(Behaviours, dat) {
-    var behaviourConfig = {
+(function init(OneHundredLittleCircles, dat) {
+    var config = {
         movement: 'weave'
     };
 
-    var behaviours = new Behaviours();
-    behaviours.init();
+    var oneHundredLittleCircles = new OneHundredLittleCircles();
+    oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    var movementController = gui.add(behaviourConfig, 'movement', ['weave', 'flutter', 'grow']);
+    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow']);
 
     movementController.onChange(function (value) {
-        behaviours.movement = MOVEMENTS[value];
-        behaviours.update();
+        oneHundredLittleCircles.movement = MOVEMENTS[value];
+        oneHundredLittleCircles.update();
     });
-}(Behaviours, dat));
+}(OneHundredLittleCircles, dat));
