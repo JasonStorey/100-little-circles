@@ -11,18 +11,18 @@ OneHundredLittleCircles.prototype = {
         Sketch.create({
             setup: function () {
                 for (var j = 0; j < NUMBER_OF_MOVERS; j++) {
-                    self.movers.push(new Mover(random(this.width), random(this.height), self.movement));
+                    self.movers.push(new Mover(random(this.width), random(this.height), this, self.movement));
                 }
             },
             update: function () {
                 self.movers.forEach(function (mover) {
-                    mover.update(this);
-                }.bind(this));
+                    mover.update();
+                });
             },
             draw: function () {
                 self.movers.forEach(function (mover) {
-                    mover.draw(this);
-                }.bind(this));
+                    mover.draw();
+                });
             }
         });
     },
@@ -43,8 +43,9 @@ var MOVEMENTS = {
     weave: {
         setup: function(mover) {
             mover.radius = 5;
+            mover.theta = random(TWO_PI);
         },
-        update:function(mover) {
+        update: function(mover) {
             mover.theta += random(-0.3, 0.3);
             mover.vx += sin(mover.theta);
             mover.vy += cos(mover.theta);
@@ -55,15 +56,18 @@ var MOVEMENTS = {
     grow: {
         setup: function(mover) {
             mover.radius = random(1, 5);
+            mover.theta = random(TWO_PI);
         },
-        update:function(mover) {
+        update: function(mover) {
             MOVEMENTS.weave.update(mover);
             mover.radius *= random(1, 1.03);
         }
     },
     flutter: {
-        setup: function(mover) {},
-        update:function(mover) {
+        setup: function(mover) {
+            mover.theta = random(TWO_PI);
+        },
+        update: function(mover) {
             mover.drag = 0.1;
             mover.radius = random(10);
             mover.theta += random(0.15);
@@ -72,19 +76,31 @@ var MOVEMENTS = {
             mover.vx *= 1 - mover.drag;
             mover.vy *= 1 - mover.drag;
         }
+    },
+    wave: {
+        setup: function(mover) {
+            mover.theta = random(TWO_PI);
+            mover.radius = 1 + (mover.theta * 2);
+            mover.vx = mover.radius * -0.2;
+        },
+        update: function(mover) {
+            mover.theta += 0.05;
+            mover.vy = cos(mover.theta) * (mover.radius / 5);
+        }
     }
 };
 
-function Mover(x, y, movement) {
+function Mover(x, y, ctx, movement) {
     this.x = x;
     this.y = y;
+    this.ctx = ctx;
     this.setMovement(movement);
 }
 
 Mover.prototype = {
     reset: function() {
         this.radius = 1;
-        this.theta = random(TWO_PI);
+        this.theta = 0;
         this.drag = 0.2;
         this.vx = 0;
         this.vy = 0;
@@ -94,29 +110,29 @@ Mover.prototype = {
         this.movement = movement;
         this.movement.setup(this);
     },
-    update: function(ctx) {
+    update: function() {
         this.x += this.vx;
         this.y += this.vy;
 
-        if(this.x + this.radius > ctx.width + (this.radius * 2)) {
+        if(this.x + this.radius > this.ctx.width + (this.radius * 2)) {
             this.x = 0 - this.radius;
         } else if(this.x - this.radius < 0 - (this.radius * 2)) {
-            this.x = ctx.width + this.radius;
+            this.x = this.ctx.width + this.radius;
         }
 
-        if(this.y + this.radius > ctx.height + (this.radius * 2)) {
+        if(this.y + this.radius > this.ctx.height + (this.radius * 2)) {
             this.y = 0 - this.radius;
         } else if(this.y - this.radius < 0 - (this.radius * 2)) {
-            this.y = ctx.height + this.radius;
+            this.y = this.ctx.height + this.radius;
         }
 
         this.movement.update(this);
     },
-    draw: function(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, TWO_PI);
-        ctx.fillStyle = '#000';
-        ctx.fill();
+    draw: function() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.radius, 0, TWO_PI);
+        this.ctx.fillStyle = '#000';
+        this.ctx.fill();
     }
 };
 
@@ -129,7 +145,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow']);
+    var movementController = gui.add(config, 'movement', ['weave', 'flutter', 'grow', 'wave']);
 
     movementController.onChange(function (value) {
         oneHundredLittleCircles.movement = MOVEMENTS[value];

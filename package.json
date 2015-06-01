@@ -1,0 +1,22 @@
+{
+  "name": "100-little-circles",
+  "version": "0.1.0",
+  "description": "",
+  "main": "100-little-circles.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JasonStorey/100-little-circles.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JasonStorey/100-little-circles/issues"
+  },
+  "homepage": "https://github.com/JasonStorey/100-little-circles",
+  "devDependencies": {
+    "sketch-js": "git://github.com/soulwire/sketch.js.git"
+  }
+}
