@@ -40,38 +40,50 @@ OneHundredLittleCircles.prototype = {
 };
 
 var MOVEMENTS = {
-    weave: function(mover) {
-        mover.theta += random(-0.3, 0.3);
-        mover.vx += sin(mover.theta);
-        mover.vy += cos(mover.theta);
-        mover.vx *= 1 - mover.drag;
-        mover.vy *= 1 - mover.drag;
+    weave: {
+        setup: function(mover) {
+            mover.radius = 5;
+        },
+        update:function(mover) {
+            mover.theta += random(-0.3, 0.3);
+            mover.vx += sin(mover.theta);
+            mover.vy += cos(mover.theta);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
     },
-    grow: function(mover) {
-        MOVEMENTS.weave(mover);
-        mover.radius *= random(1, 1.03);
+    grow: {
+        setup: function(mover) {
+            mover.radius = random(1, 5);
+        },
+        update:function(mover) {
+            MOVEMENTS.weave.update(mover);
+            mover.radius *= random(1, 1.03);
+        }
     },
-    flutter: function(mover) {
-        mover.drag = 0.1;
-        mover.radius = random(10);
-        mover.theta += random(0.15);
-        mover.vx += sin(mover.theta);
-        mover.vy += (cos(mover.theta) / 3) - random(0.3);
-        mover.vx *= 1 - mover.drag;
-        mover.vy *= 1 - mover.drag;
+    flutter: {
+        setup: function(mover) {},
+        update:function(mover) {
+            mover.drag = 0.1;
+            mover.radius = random(10);
+            mover.theta += random(0.15);
+            mover.vx += sin(mover.theta);
+            mover.vy += (cos(mover.theta) / 3) - random(0.3);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
     }
 };
 
 function Mover(x, y, movement) {
     this.x = x;
     this.y = y;
-    this.movement = movement;
-    this.reset();
+    this.setMovement(movement);
 }
 
 Mover.prototype = {
     reset: function() {
-        this.radius = 3;
+        this.radius = 1;
         this.theta = random(TWO_PI);
         this.drag = 0.2;
         this.vx = 0;
@@ -80,6 +92,7 @@ Mover.prototype = {
     setMovement: function(movement) {
         this.reset();
         this.movement = movement;
+        this.movement.setup(this);
     },
     update: function(ctx) {
         this.x += this.vx;
@@ -97,7 +110,7 @@ Mover.prototype = {
             this.y = ctx.height + this.radius;
         }
 
-        this.movement(this);
+        this.movement.update(this);
     },
     draw: function(ctx) {
         ctx.beginPath();
