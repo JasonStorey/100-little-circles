@@ -3,8 +3,8 @@ function OneHundredLittleCircles() {
     this._movement = MOVEMENTS[this.movement];
     this.movers = [];
     this.fillStyle = '#000';
-
-    this.backgroundColour = '#fff';
+    this.background = '#fff';
+    this.velocity = 1;
 }
 
 OneHundredLittleCircles.prototype = {
@@ -21,11 +21,11 @@ OneHundredLittleCircles.prototype = {
             update: function () {
                 self._movement = MOVEMENTS[self.movement];
                 self.movers.forEach(function (mover) {
-                    mover.update(self._movement, self.fillStyle);
+                    mover.update(self._movement, self.fillStyle, self.velocity);
                 });
             },
             draw: function () {
-                this.canvas.style['background-color'] = self.backgroundColour;
+                this.canvas.style['background-color'] = self.background;
                 self.movers.forEach(function (mover) {
                     mover.draw();
                 });
@@ -132,7 +132,7 @@ Mover.prototype = {
         this.vx = 0;
         this.vy = 0;
     },
-    update: function(movement, fillstyle) {
+    update: function(movement, fillstyle, velocity) {
         this.fillStyle = fillstyle;
 
         if(this.movement !== movement) {
@@ -143,8 +143,8 @@ Mover.prototype = {
 
         this.movement.update(this);
 
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += this.vx * velocity;
+        this.y += this.vy * velocity;
 
         if(this.x + this.radius > this.ctx.width + (this.radius * 2)) {
             this.x = 0 - this.radius;
@@ -172,7 +172,8 @@ Mover.prototype = {
 
     var gui = new dat.GUI();
     gui.add(oneHundredLittleCircles, 'movement', ['weave', 'flutter', 'grow', 'waves', 'fizz']);
+    gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fillStyle');
-    gui.addColor(oneHundredLittleCircles, 'backgroundColour');
+    gui.addColor(oneHundredLittleCircles, 'background');
 
 }(OneHundredLittleCircles, dat));
