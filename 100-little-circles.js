@@ -40,25 +40,25 @@ OneHundredLittleCircles.prototype = {
 };
 
 var MOVEMENTS = {
-    weave: function() {
-        this.theta += random(-0.3, 0.3);
-        this.vx += sin(this.theta);
-        this.vy += cos(this.theta);
-        this.vx *= 1 - this.drag;
-        this.vy *= 1 - this.drag;
+    weave: function(mover) {
+        mover.theta += random(-0.3, 0.3);
+        mover.vx += sin(mover.theta);
+        mover.vy += cos(mover.theta);
+        mover.vx *= 1 - mover.drag;
+        mover.vy *= 1 - mover.drag;
     },
-    grow: function() {
-        MOVEMENTS.weave.call(this);
-        this.radius *= random(1, 1.03);
+    grow: function(mover) {
+        MOVEMENTS.weave(mover);
+        mover.radius *= random(1, 1.03);
     },
-    flutter: function() {
-        this.drag = 0.1;
-        this.radius = random(10);
-        this.theta += random(0.15);
-        this.vx += sin(this.theta);
-        this.vy += (cos(this.theta) / 3) - random(0.3);
-        this.vx *= 1 - this.drag;
-        this.vy *= 1 - this.drag;
+    flutter: function(mover) {
+        mover.drag = 0.1;
+        mover.radius = random(10);
+        mover.theta += random(0.15);
+        mover.vx += sin(mover.theta);
+        mover.vy += (cos(mover.theta) / 3) - random(0.3);
+        mover.vx *= 1 - mover.drag;
+        mover.vy *= 1 - mover.drag;
     }
 };
 
@@ -97,7 +97,7 @@ Mover.prototype = {
             this.y = ctx.height + this.radius;
         }
 
-        this.movement();
+        this.movement(this);
     },
     draw: function(ctx) {
         ctx.beginPath();
