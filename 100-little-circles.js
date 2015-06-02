@@ -25,7 +25,7 @@ OneHundredLittleCircles.prototype = {
                 });
             },
             draw: function () {
-                this.canvas.style['background-color'] = self.background;
+                this.canvas.style.backgroundColor = self.background;
                 self.movers.forEach(function (mover) {
                     mover.draw();
                 });
