@@ -1,5 +1,5 @@
 function OneHundredLittleCircles() {
-    this.movement = 'weave';
+    this.movement = 'fizz';
     this._movement = MOVEMENTS[this.movement];
     this.movers = [];
     this.fill = '#000';
@@ -159,7 +159,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['weave', 'flutter', 'grow', 'waves', 'fizz']);
+    gui.add(oneHundredLittleCircles, 'movement', ['flutter', 'grow', 'waves', 'fizz', 'weave']);
     gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
