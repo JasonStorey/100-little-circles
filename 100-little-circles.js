@@ -90,28 +90,16 @@ var MOVEMENTS = {
     },
     fizz: {
         setup: function(mover) {
+            mover.drag = 0.4;
             mover.theta = random(TWO_PI);
             mover.radius = random(1, 70);
         },
         update: function(mover) {
-            if(mover.radius > 70) {
-                mover.radius *= 1.02;
-                mover.vy += -5;
-            } else {
-                mover.radius *= 1.0005;
-            }
-
             mover.theta += random(-0.3, 0.3);
             mover.vx += sin(mover.theta);
-            mover.vy += cos(mover.theta) - 2;
+            mover.vy += cos(mover.theta) - 3 - (mover.radius * 0.08);
             mover.vx *= 1 - mover.drag;
             mover.vy *= 1 - mover.drag;
-
-            if(mover.y + mover.vy - mover.radius < 0 - (mover.radius * 2)) {
-                mover.radius = random(1, 70);
-                mover.vy = -1;
-                mover.y = mover.ctx.height + mover.radius;
-            }
         }
     }
 };
@@ -141,11 +129,6 @@ Mover.prototype = {
             this.movement.setup(this);
         }
 
-        this.movement.update(this);
-
-        this.x += this.vx * velocity;
-        this.y += this.vy * velocity;
-
         if(this.x + this.radius > this.ctx.width + (this.radius * 2)) {
             this.x = 0 - this.radius;
         } else if(this.x - this.radius < 0 - (this.radius * 2)) {
@@ -157,6 +140,11 @@ Mover.prototype = {
         } else if(this.y - this.radius < 0 - (this.radius * 2)) {
             this.y = this.ctx.height + this.radius;
         }
+
+        this.movement.update(this);
+
+        this.x += this.vx * velocity;
+        this.y += this.vy * velocity;
     },
     draw: function() {
         this.ctx.beginPath();
