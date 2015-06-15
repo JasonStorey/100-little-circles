@@ -142,7 +142,6 @@ var MOVEMENTS = {
     dizzy: {
         setup: function(mover) {
            mover.radius = random(5, 10); 
-           // mover.theta = asin(mover.y / mover.x);
            mover.theta = 1;
         },
         update: function(mover) {
@@ -210,8 +209,8 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave' ,'dizzy','shrink','rave','wobble']);
-    gui.add(oneHundredLittleCircles, 'velocity', -10, 10);
+    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave', 'dizzy', 'shrink', 'rave', 'wobble']);
+    gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
 
