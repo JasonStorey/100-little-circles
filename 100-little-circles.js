@@ -63,6 +63,16 @@ var MOVEMENTS = {
             mover.radius *= random(1, 1.03);
         }
     },
+    shrink: {
+        setup: function(mover) {
+            mover.radius = random(40, 500);
+            mover.theta = random(TWO_PI);
+        },
+        update: function(mover) {
+            MOVEMENTS.weave.update(mover);
+            mover.radius /= random(1, 1.03);
+        }
+    },
     flutter: {
         setup: function(mover) {
             mover.theta = random(TWO_PI);
@@ -98,6 +108,47 @@ var MOVEMENTS = {
             mover.theta += random(-0.3, 0.3);
             mover.vx += sin(mover.theta);
             mover.vy += cos(mover.theta) - 3 - (mover.radius * 0.08);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
+    },
+    rave: {
+        setup: function(mover) {
+           mover.radius = random(10, 60); 
+           mover.theta = 10;
+        },
+        update: function(mover) {
+            mover.theta += 0.3;
+            mover.vx += sin(mover.theta);
+            mover.vy += cos(mover.theta);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+            mover.radius = random(1,30);
+        }
+    },
+    wobble: {
+        setup: function(mover) {
+           mover.radius = random(10, 60); 
+           mover.theta = 10;
+        },
+        update: function(mover) {
+            mover.theta += 1;
+            mover.vx += sin(mover.theta);
+            mover.vy += cos(mover.theta);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
+    },
+    dizzy: {
+        setup: function(mover) {
+           mover.radius = random(5, 10); 
+           // mover.theta = asin(mover.y / mover.x);
+           mover.theta = 1;
+        },
+        update: function(mover) {
+            mover.theta += 0.11;
+            mover.vx += sin(mover.theta);
+            mover.vy += cos(mover.theta);
             mover.vx *= 1 - mover.drag;
             mover.vy *= 1 - mover.drag;
         }
@@ -159,8 +210,8 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave']);
-    gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
+    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave' ,'dizzy','shrink','rave','wobble']);
+    gui.add(oneHundredLittleCircles, 'velocity', -10, 10);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
 
