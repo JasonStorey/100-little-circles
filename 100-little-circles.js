@@ -115,7 +115,6 @@ var MOVEMENTS = {
     rave: {
         setup: function(mover) {
            mover.radius = random(10, 60); 
-           mover.theta = 10;
         },
         update: function(mover) {
             mover.theta += 0.3;
@@ -129,7 +128,6 @@ var MOVEMENTS = {
     wobble: {
         setup: function(mover) {
            mover.radius = random(10, 60); 
-           mover.theta = 10;
         },
         update: function(mover) {
             mover.theta += 1;
@@ -142,7 +140,6 @@ var MOVEMENTS = {
     dizzy: {
         setup: function(mover) {
            mover.radius = random(5, 10); 
-           mover.theta = 1;
         },
         update: function(mover) {
             mover.theta += 0.11;
@@ -165,6 +162,24 @@ var MOVEMENTS = {
                 mover.vy -= 30;
             }
             mover.vx -= random(1, 5);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
+    },
+    rowing: {
+        setup: function(mover) {
+            mover.radius = random(5, 40);
+        },
+        update: function(mover) {
+            mover.theta += 0.03;
+            if(sin(mover.theta) > 0) {
+                mover.vx += mover.radius * 0.02;
+                mover.vy += mover.radius * 0.05;
+            } else {
+                mover.vx -= mover.radius * 0.2;
+                mover.vy -= mover.radius * 0.03;
+            }
+
             mover.vx *= 1 - mover.drag;
             mover.vy *= 1 - mover.drag;
         }
@@ -226,7 +241,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'wobble']);
+    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'rowing', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'wobble']);
     gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
