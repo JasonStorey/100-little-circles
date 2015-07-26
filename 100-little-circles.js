@@ -259,7 +259,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['egg', 'fizz', 'flutter', 'grow', 'waves', 'rowing', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'twoOr3D', 'wobble']);
+    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'rowing', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'twoOr3D', 'wobble']);
     gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
