@@ -201,6 +201,22 @@ var MOVEMENTS = {
             mover.vx *= 1 - mover.drag;
             mover.vy *= 1 - mover.drag;
         }
+    },
+    swimmers: {
+        setup: function(mover) {
+            mover.param1 = random(10, 50);
+            mover.param2 = random(TWO_PI);
+            mover.theta = random(TWO_PI);
+        },
+        update: function(mover) {
+            mover.param2 += 1 / mover.param1;
+            mover.radius = 5 + Math.abs(sin(mover.param2 + mover.param1)) * mover.param1;
+            mover.theta += 0.1;
+            mover.vx += (mover.radius / 40);
+            mover.vy += sin(mover.theta);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
     }
 };
 
@@ -219,6 +235,8 @@ Mover.prototype = {
         this.drag = 0.2;
         this.vx = 0;
         this.vy = 0;
+        this.param1 = 0;
+        this.param2 = 0;
     },
     update: function(movement, fillstyle, velocity) {
         this.fillStyle = fillstyle;
@@ -259,7 +277,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'rowing', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'twoOr3D', 'wobble']);
+    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'rowing', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'twoOr3D', 'swimmers', 'wobble']);
     gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
