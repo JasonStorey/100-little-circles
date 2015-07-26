@@ -151,6 +151,23 @@ var MOVEMENTS = {
             mover.vx *= 1 - mover.drag;
             mover.vy *= 1 - mover.drag;
         }
+    },
+    static: {
+        setup: function(mover) {
+            mover.radius = random(1, 3);
+            mover.theta = random(1, 2);
+        },
+        update: function(mover) {
+            mover.theta += random(0.1);
+            if(sin(mover.theta) > 0) {
+                mover.vy += 50;
+            } else {
+                mover.vy -= 30;
+            }
+            mover.vx -= random(1, 5);
+            mover.vx *= 1 - mover.drag;
+            mover.vy *= 1 - mover.drag;
+        }
     }
 };
 
@@ -209,7 +226,7 @@ Mover.prototype = {
     oneHundredLittleCircles.init();
 
     var gui = new dat.GUI();
-    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave', 'dizzy', 'shrink', 'rave', 'wobble']);
+    gui.add(oneHundredLittleCircles, 'movement', ['fizz', 'flutter', 'grow', 'waves', 'weave', 'dizzy', 'shrink', 'static', 'rave', 'wobble']);
     gui.add(oneHundredLittleCircles, 'velocity', -5, 5);
     gui.addColor(oneHundredLittleCircles, 'fill');
     gui.addColor(oneHundredLittleCircles, 'background');
